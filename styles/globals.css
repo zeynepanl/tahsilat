@@ -1,0 +1,21 @@
+/* styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global CSS değişkenlerini tek bir yerde toplayın */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --white: hsl(0, 0%, 100%);
+  --black: hsl(240, 15%, 9%);
+  --paragraph: hsl(0, 0%, 83%);
+  --line: hsl(240, 9%, 17%);
+  --primary: hsl(266, 92%, 58%);
+}
+/* Gövde stilini global değişkenlerle ayarlayın */
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
