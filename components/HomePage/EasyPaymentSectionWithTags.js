@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import AOS from "aos";
-// Burada gsap import etmiyoruz. Onu dinamik olarak client-side'da yapacağız.
+import "aos/dist/aos.css"; // AOS stillerini import ettiğinizden emin olun
 
 function EasyPaymentSectionWithTags() {
   const overlayRef = useRef(null);
@@ -25,9 +25,12 @@ function EasyPaymentSectionWithTags() {
           // Overlay başlangıçta görünmez
           gsap.set(overlayRef.current, { opacity: 0 });
 
-          // Kartları başlangıçta görünmez yapıyoruz (normal konumda sadece opacity 0)
-          featureRefs.current.forEach((el) => {
-            gsap.set(el, { opacity: 0 });
+          // Kartları başlangıçta görünmez yapıyoruz (normal konumda sadece opacity 0, scale 0.8 ve düşük parlaklık)
+          gsap.set(featureRefs.current, {
+            opacity: 0,
+            scale: 0.8,
+            filter:
+              "brightness(0.5) drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5))",
           });
 
           // ScrollTrigger ile animasyon:
@@ -35,8 +38,9 @@ function EasyPaymentSectionWithTags() {
             scrollTrigger: {
               trigger: featureContainerRef.current,
               start: "top 80%", // Bu alana scroll ile girildiğinde başlayacak
-              end: "top 20%", // Bu nokta geçildiğinde animasyon tamamlanmış sayılacak
+              end: "bottom 20%", // Animasyonun tamamlanması için end noktasını artırdık
               scrub: true, // Scroll ile animasyon senkron
+              markers: false, // Debug için true yapabilirsiniz
               onEnter: () => {
                 // Girerken overlay'i karart
                 gsap.to(overlayRef.current, {
@@ -64,19 +68,24 @@ function EasyPaymentSectionWithTags() {
             },
           });
 
-          // Kartları tek tek görünecek şekilde timeline'a ekleyelim
-          featureRefs.current.forEach((el, i) => {
-            tl.to(
-              el,
-              {
-                opacity: 1,
-                duration: 2,
-                ease: "power1.out",
-                delay: i * 0.5,
-              },
-              0
-            );
-          });
+          // Tüm kartlara aynı animasyonu ekleyelim ve stagger ile sırayla gelmelerini sağlayalım
+          tl.fromTo(
+            featureRefs.current,
+            {
+              opacity: 0,
+              scale: 0.8,
+              filter:
+                "brightness(0.5) drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5))",
+            },
+            {
+              opacity: 1,
+              scale: 1,
+              filter: "brightness(1)",
+              duration: 4, // Animasyon süresini azaltarak daha hızlı yapabilirsiniz
+              ease: "power1.out",
+              stagger: 2, // Kartlar arası gecikmeyi azaltarak daha düzgün animasyon sağlayın
+            }
+          );
         }
       );
     }

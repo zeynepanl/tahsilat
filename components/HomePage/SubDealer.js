@@ -41,7 +41,7 @@ function SubDealer() {
                 scrollTrigger: {
                   trigger: item, // Her yazı kendi tetikleyicisi ile
                   start: "top 50%", // Yazı görünmeden hemen önce başlar
-                  end: "top 30%", // Yazı görünür olduğunda biter
+                  end: "top 40%", // Yazı görünür olduğunda biter
                   scrub: true, // Scroll hareketine göre animasyon
                 },
               }
