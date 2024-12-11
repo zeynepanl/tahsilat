@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
 import Image from "next/image";
 
 const features = [
@@ -28,18 +30,67 @@ const features = [
 ];
 
 const PaymentLinkIntro = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const ctx = gsap.context(() => {
+              const cards = gsap.utils.toArray(".feature");
+              gsap.fromTo(
+                cards,
+                {
+                  y: -100,
+                  rotationY: 90,
+                  opacity: 0, // Başlangıçta tamamen görünmez
+                  filter: "blur(3px)", // Hafif bulanıklık
+                },
+                {
+                  y: 0,
+                  rotationY: 0,
+                  opacity: 1, // Animasyon sonunda görünür
+                  filter: "blur(0px)", // Netlik sağlanır
+                  duration: 1,
+                  ease: "power3.out",
+                  stagger: 0.4,
+                }
+              );
+            }, sectionRef);
+
+            observer.disconnect(); // Animasyon sonrası gözlemlemeyi durdur
+          }
+        });
+      },
+      { threshold: 0.7 } // %70 görünürlükte tetiklenir
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div>
+    <div ref={sectionRef}>
       {/* Sol ve Sağ İçerik */}
       <section className="flex flex-col md:flex-row items-center gap-8 px-6 py-12 max-w-7xl mx-auto">
         {/* Left Content */}
         <div className="md:w-1/2">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+          <h1 className="text-4xl font-bold text-indigo-600 dark:text-white">
             Link ile Ödeme
           </h1>
           <p className="mt-4 text-gray-600 dark:text-gray-300">
-            Tahsilate ile ödeme talepleriniz için kolayca bir bağlantı oluşturabilir ve bunu müşterilerinizle paylaşabilirsiniz. 
-            Müşterileriniz kart bilgilerini girmelerine gerek kalmadan tek bir tıklamayla size ödeme yapabilirler.
+            Tahsilate ile ödeme talepleriniz için kolayca bir bağlantı
+            oluşturabilir ve bunu müşterilerinizle paylaşabilirsiniz. Müşterileriniz
+            kart bilgilerini girmelerine gerek kalmadan tek bir tıklamayla size
+            ödeme yapabilirler.
           </p>
         </div>
 
@@ -60,7 +111,7 @@ const PaymentLinkIntro = () => {
         {features.map((feature) => (
           <div
             key={feature.id}
-            className="p-4"
+            className="p-4 feature opacity-0" // Kartları başlangıçta görünmez yapar
           >
             <Image
               src={feature.image}

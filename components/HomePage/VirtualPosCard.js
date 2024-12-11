@@ -7,7 +7,6 @@ function VirtualPosCard() {
   const textRef = useRef(null);
   const imageRef = useRef(null);
   const titleRef = useRef(null);
-  const cardContainerRef = useRef(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -48,76 +47,13 @@ function VirtualPosCard() {
               ease: 'power4.out',
             }
           );
-
-          // Kartları gruplandırma
-          const cards = Array.from(cardContainerRef.current.children);
-          const groupSize = Math.ceil(cards.length / 2);
-          const firstRow = cards.slice(0, groupSize);
-          const secondRow = cards.slice(groupSize);
-
-          // İlk sıra sağdan gelir
-          gsap.timeline({
-            scrollTrigger: {
-              trigger: cardContainerRef.current,
-              start: 'top 80%',
-              end: 'top 40%',
-              scrub: true,
-            },
-          }).fromTo(
-            firstRow,
-            { x: 300, opacity: 0 },
-            {
-              x: 0,
-              opacity: 1,
-              duration: 3,
-              ease: 'power2.out',
-              stagger: 0.3,
-            }
-          );
-
-          // İkinci sıra soldan gelir
-          gsap.timeline({
-            scrollTrigger: {
-              trigger: cardContainerRef.current,
-              start: 'top 80%',
-              end: 'top 40%',
-              scrub: true,
-            },
-          }).fromTo(
-            secondRow,
-            { x: -300, opacity: 0 },
-            {
-              x: 0,
-              opacity: 1,
-              duration: 3,
-              ease: 'power2.out',
-              stagger: 0.3,
-            }
-          );
         });
       });
     }
   }, []);
 
-  const cardData = [
-    'Mastercard', 'Troy', 'Bonus', 'QNB', 'Paraf',
-    'Albaraka', 'Axess', 'Visa', 'DenizBank', 'World',
-    'American Express', 'Bankkart', 'Maximum', 'Yapı Kredi', 'Ziraat',
-    'Halkbank', 'Garanti', 'ING', 'HSBC', 'Finansbank',
-  ];
-
-  const renderCards = () =>
-    cardData.map((card, index) => (
-      <div
-        key={index}
-        className="bg-white shadow-md border border-gray-300 rounded-lg flex justify-center items-center m-2 w-24 h-12"
-      >
-        <p className="text-gray-800 font-medium text-sm">{card}</p>
-      </div>
-    ));
-
   return (
-    <div className="pt-24 px-6 items-center justify-center max-w-full font-poppins">
+    <div className="pt-24 px-6 items-center justify-center max-w-full font-poppins pb-16">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center">
         {/* Metin Kısmı */}
         <div
@@ -151,15 +87,8 @@ function VirtualPosCard() {
         </div>
       </div>
 
-      {/* Kartlar */}
-      <div
-        ref={cardContainerRef}
-        className="relative mt-10 h-60 overflow-hidden" // Sabit alan
-      >
-        <div className="grid grid-cols-10 gap-2 justify-center items-center">
-          {renderCards()}
-        </div>
-      </div>
+      {/* Alt Kısım Boşluk */}
+      <div className="mt-16"></div>
     </div>
   );
 }

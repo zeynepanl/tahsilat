@@ -12,6 +12,7 @@ import PartnerIntegration from '@/components/HomePage/PartnerIntegration'
 import CreatePool from '@/components/HomePage/CreatePool'
 import SubDealer from '@/components/HomePage/SubDealer'
 import PaymentLinkIntro from '@/components/HomePage/PaymentLinkIntro'
+import PhysicalPOSSolutions from '@/components/HomePage/PhysicalPOSSolutions'
 
 export default function Home() {
   return (
@@ -34,6 +35,7 @@ export default function Home() {
   <BankSetup />
   <PaymentLinkIntro />
   <SingleClickPayment />
+  <PhysicalPOSSolutions/>
   <SecuritySection />
   <SecurePaymentMethods />
   <TestimonialsSection />
