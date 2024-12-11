@@ -10,6 +10,7 @@ const BankSetup = () => {
   const cardsContainerRef = useRef(null); // Kartları tutacak referans
   const engineRef = useRef(null);
   const runnerRef = useRef(null);
+  const mouseConstraintRef = useRef(null);
 
   useEffect(() => {
     const observerOptions = {
@@ -47,7 +48,7 @@ const BankSetup = () => {
 
   const initializeMatter = () => {
     if (typeof window !== "undefined" && cardsContainerRef.current) {
-      const { Engine, Runner, Bodies, Composite, Events } = Matter;
+      const { Engine, Runner, Bodies, Composite, Events, Mouse, MouseConstraint } = Matter;
 
       const engine = Engine.create();
       engineRef.current = engine;
@@ -104,6 +105,19 @@ const BankSetup = () => {
         return body;
       });
 
+      // Fare sürüklemesini etkinleştirmek için MouseConstraint ekliyoruz
+      const mouse = Mouse.create(cardsContainerRef.current);
+      const mouseConstraint = MouseConstraint.create(engine, {
+        mouse: mouse,
+        constraint: {
+          stiffness: 0.1,
+          render: { visible: false },
+        },
+      });
+      mouseConstraintRef.current = mouseConstraint;
+      Composite.add(engine.world, mouseConstraint);
+
+      // Matter.js motoru ile kartları hareket ettiriyoruz
       Events.on(engine, "afterUpdate", () => {
         cardBodies.forEach((body, index) => {
           const card = cards[index];
@@ -118,6 +132,7 @@ const BankSetup = () => {
       return () => {
         Runner.stop(runner);
         Engine.clear(engine);
+        Mouse.destroy(mouse);
       };
     }
   };
