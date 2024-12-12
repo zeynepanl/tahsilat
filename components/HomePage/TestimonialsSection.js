@@ -41,7 +41,7 @@ function TestimonialsSection() {
             headerRef.current,
             { opacity: 1, y: 0 },
             {
-              opacity: 0,
+              opacity: 1,
               y: -100, // Yukarı doğru kayma
               duration: 1,
               scrollTrigger: {
@@ -98,14 +98,15 @@ function TestimonialsSection() {
   }, []);
 
   return (
-    <div ref={sectionRef} className="bg-blue-600 text-white font-poppins">
+    <div ref={sectionRef} className="bg-indigo-700 text-white font-poppins">
       {/* 1. Ana Metin */}
       <div
         ref={mainTextRef}
         className="flex items-center justify-center h-screen text-center"
       >
         <h1 className="text-4xl font-bold mb-4">
-          Tahsilate'ye binlerce kişi güveniyor! Bakın müşterilerimiz ne diyor.
+          Tahsilate'ye binlerce kişi güveniyor! 
+          <br/> Bakın müşterilerimiz ne diyor.
         </h1>
       </div>
 

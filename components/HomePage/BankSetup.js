@@ -203,7 +203,7 @@ const BankSetup = () => {
         ].map((card, index) => (
           <div
             key={index}
-            className="absolute bg-white shadow-lg rounded-full flex items-center justify-center w-48 h-24 text-lg font-medium text-gray-800 dark:text-gray-300"
+            className="absolute bg-gray-50 shadow-lg rounded-full flex items-center justify-center w-48 h-24 text-lg font-medium text-gray-800 dark:text-gray-300"
           >
             {card}
           </div>
