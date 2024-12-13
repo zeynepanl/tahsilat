@@ -7,6 +7,7 @@ function VirtualPosCard() {
   const textRef = useRef(null);
   const imageRef = useRef(null);
   const titleRef = useRef(null);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -14,38 +15,57 @@ function VirtualPosCard() {
         import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
           gsap.registerPlugin(ScrollTrigger);
 
-          // Başlık Harf Harf Animasyonu
-          const letters = titleRef.current.textContent.split('');
-          titleRef.current.innerHTML = '';
-          letters.forEach((letter) => {
-            const span = document.createElement('span');
-            span.textContent = letter === ' ' ? '\u00A0' : letter;
-            titleRef.current.appendChild(span);
+          // Başlık başlangıç ayarları
+          gsap.set(titleRef.current, { opacity: 1, fontSize: '5rem', y: '0%' });
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: textRef.current,
+              start: 'top center',
+              end: '+=500',
+              scrub: 1,
+              pin: true,
+            },
           });
 
-          gsap.fromTo(
-            titleRef.current.children,
+          // Başlık animasyonu
+          tl.to(
+            titleRef.current,
+            {
+              fontSize: '2rem',
+              opacity: 0,
+              y: '-100%',
+              duration: 2,
+              ease: 'power3.inOut',
+            }
+          );
+
+          // Görselin animasyonu
+          tl.fromTo(
+            imageRef.current,
+            { opacity: 0, scale: 0.5, y: 50 },
+            {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              duration: 1.5,
+              ease: 'power3.out',
+            },
+            '-=1'
+          );
+
+          // Diğer içerik animasyonu
+          tl.fromTo(
+            contentRef.current,
             { opacity: 0, y: 50 },
             {
               opacity: 1,
               y: 0,
-              duration: 0.5,
-              stagger: 0.1,
-            }
-          );
-
-          // Hero Resmi Animasyonu
-          gsap.fromTo(
-            imageRef.current,
-            { opacity: 0, x: 300, rotateY: 90, scale: 0.5 },
-            {
-              opacity: 1,
-              x: 0,
-              rotateY: 0,
-              scale: 1,
-              duration: 2,
-              ease: 'power4.out',
-            }
+              duration: 1.5,
+              ease: 'power3.out',
+              stagger: 0.3,
+            },
+            '-=1'
           );
         });
       });
@@ -55,40 +75,42 @@ function VirtualPosCard() {
   return (
     <div className="pt-24 px-6 items-center justify-center max-w-full font-poppins pb-16">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center">
-        {/* Metin Kısmı */}
+        {/* Başlangıçta Ortada Görünen Yazı */}
         <div
-          className="w-full md:w-1/2 md:pr-8 mb-6 md:mb-0 text-center md:text-left"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-5xl font-bold text-active z-10"
           ref={textRef}
         >
-          <h2
-            className="text-3xl md:text-5xl font-bold text-active mb-4"
-            ref={titleRef}
+          <h1 ref={titleRef}>Avantajlı Sanal Pos Dünyası</h1>
+        </div>
+
+        {/* Görsel ve Metin Kısmı */}
+        <div className="w-full flex flex-col md:flex-row items-center gap-6 mt-16">
+          {/* Metin ve Buton */}
+          <div
+            className="w-full md:w-1/2 text-center md:text-left"
+            ref={contentRef}
           >
-            Avantajlı Sanal Pos Dünyası
-          </h2>
-          <p className="text-gray-700 text-sm md:text-base">
-            Tahsilat Süreçlerinizi Düşünmeyin. Son verimli, güvenli ve kullanıcı dostu altyapımız ile tek tıklama ile kolay ödeme alın. İşinize odaklanın.
-          </p>
-          <div className="flex justify-center md:justify-start mt-6">
-            <Button text="Şimdi Başvur" onClick={() => router.push('/nav/ContactForm')} />
+            <p className="text-gray-700 text-sm md:text-base">
+              Tahsilat Süreçlerinizi Düşünmeyin. Son verimli, güvenli ve kullanıcı dostu altyapımız ile tek tıklama ile kolay ödeme alın. İşinize odaklanın.
+            </p>
+            <div className="flex justify-center md:justify-start mt-6">
+              <Button
+                text="Şimdi Başvur"
+                onClick={() => router.push('/nav/ContactForm')}
+              />
+            </div>
+          </div>
+
+          {/* Görsel */}
+          <div className="w-full md:w-1/2 flex justify-center" ref={imageRef}>
+            <img
+              src="/assets/hero.png"
+              alt="Sanal Pos Illustration"
+              className="w-full h-auto max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg"
+            />
           </div>
         </div>
-
-        {/* Görsel Kısmı */}
-        <div
-          className="w-full md:w-1/2 flex justify-center"
-          ref={imageRef}
-        >
-          <img
-            src="/assets/hero.png"
-            alt="Sanal Pos Illustration"
-            className="w-full h-auto max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg"
-          />
-        </div>
       </div>
-
-      {/* Alt Kısım Boşluk */}
-      <div className="mt-16"></div>
     </div>
   );
 }
