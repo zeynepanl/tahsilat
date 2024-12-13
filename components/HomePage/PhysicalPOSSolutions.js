@@ -37,6 +37,7 @@ const PhysicalPOSSolutions = () => {
         objectFit: "cover",
         zIndex: 1, // Görsel arka planda olacak
         visibility: "hidden",
+        pointerEvents: "none", // Tıklamaları başlangıçta devre dışı bırak
       });
 
       gsap.set(".animated-text", {
@@ -55,11 +56,14 @@ const PhysicalPOSSolutions = () => {
         zIndex: 10, // Metin, görselin üstünde
         visibility: "hidden",
         opacity: 0,
+        pointerEvents: "none", // Tıklamaları başlangıçta devre dışı bırak
       });
 
       gsap.set(".feature-card-container", {
         position: "relative", // Kartlar için relative konumlandırma
         zIndex: 20, // Kartlar görsel ve metnin üstünde olacak
+        opacity: 0, // Kartları başlangıçta gizle
+        pointerEvents: "none", // Tıklamaları başlangıçta devre dışı bırak
       });
 
       // Zaman çizelgesi oluştur
@@ -73,6 +77,7 @@ const PhysicalPOSSolutions = () => {
       });
 
       tl
+        // Görselin animasyonu
         .fromTo(
           ".animated-image",
           { opacity: 0.7, x: "100%" },
@@ -82,9 +87,13 @@ const PhysicalPOSSolutions = () => {
             duration: 5,
             ease: "power3.out",
             onStart: () =>
-              gsap.set(".animated-image", { visibility: "visible" }),
+              gsap.set(".animated-image", {
+                visibility: "visible",
+                pointerEvents: "auto", // Görsel tıklanabilir hale gelir
+              }),
           }
         )
+        // Metnin animasyonu
         .fromTo(
           ".animated-text",
           { y: 50, opacity: 0 },
@@ -94,10 +103,20 @@ const PhysicalPOSSolutions = () => {
             duration: 5,
             ease: "power3.out",
             onStart: () =>
-              gsap.set(".animated-text", { visibility: "visible" }),
+              gsap.set(".animated-text", {
+                visibility: "visible",
+                pointerEvents: "auto", // Metin tıklanabilir hale gelir
+              }),
           },
           "<"
         )
+        // Kartların animasyonu
+        .to(".feature-card-container", {
+          opacity: 1,
+          duration: 1.5,
+          ease: "power3.inOut",
+          pointerEvents: "auto", // Kartlar tıklanabilir hale gelir
+        })
         .fromTo(
           ".feature-card",
           { opacity: 0, y: 50 },
@@ -108,18 +127,46 @@ const PhysicalPOSSolutions = () => {
             stagger: { each: 0.2 },
             ease: "power3.out",
           },
-          "-=3" // Kart animasyonları, görsel animasyonu tamamlanmadan önce başlar
+          "-=1"
         )
+        // Görseli ve metni gizle
         .to(
           ".animated-image",
-          { opacity: 0, duration: 2, ease: "power3.in" },
+          {
+            opacity: 0,
+            duration: 2,
+            ease: "power3.in",
+            onComplete: () =>
+              gsap.set(".animated-image", {
+                visibility: "hidden",
+                pointerEvents: "none", // Görselin tıklamalarını devre dışı bırak
+              }),
+          },
           "-=1"
         )
         .to(
           ".animated-text",
-          { opacity: 0, duration: 2, ease: "power3.in" },
+          {
+            opacity: 0,
+            duration: 2,
+            ease: "power3.in",
+            onComplete: () =>
+              gsap.set(".animated-text", {
+                visibility: "hidden",
+                pointerEvents: "none", // Metnin tıklamalarını devre dışı bırak
+              }),
+          },
           "<"
-        );
+        )
+        // Kartları gizle
+        .to(".feature-card-container", {
+          opacity: 0,
+          duration: 1,
+          ease: "power3.out",
+          onComplete: () => {
+            gsap.set(".feature-card-container", { pointerEvents: "none" }); // Kartların tıklamalarını devre dışı bırak
+          },
+        });
     };
 
     loadAnimations();
