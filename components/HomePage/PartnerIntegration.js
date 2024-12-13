@@ -5,30 +5,34 @@ const PartnerIntegration = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // GSAP ve ScrollTrigger'ı yalnızca istemci tarafında yükle
-      import("gsap").then((gsapModule) => {
-        const gsap = gsapModule.default;
-        import("gsap/ScrollTrigger").then((ScrollTriggerModule) => {
-          const ScrollTrigger = ScrollTriggerModule.default;
-          gsap.registerPlugin(ScrollTrigger);
+      const loadGsap = async () => {
+        const gsap = (await import("gsap")).default;
+        const ScrollTrigger = (await import("gsap/ScrollTrigger")).default;
 
-          // ScrollTrigger animasyonu
-          gsap.fromTo(
-            sectionRef.current,
-            { scale: 1 }, // Başlangıç durumu
-            {
-              scale: 1.2, // Büyüme efekti
-              duration: 1.5,
-              scrollTrigger: {
-                trigger: sectionRef.current, // Tetikleyici alan
-                start: "top 75%", // Alanın üst kısmı %75 görünür olduğunda başlar
-                end: "top 50%", // Alanın üst kısmı %50 görünür olduğunda biter
-                scrub: true, // Scroll hareketine bağlı animasyon
-              },
-            }
-          );
-        });
-      });
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.fromTo(
+          sectionRef.current,
+          { scale: 1, x: 0, y: 0, width: "100%", height: "auto" },
+          {
+            scale: 1.2, // Büyüme efekti
+            x: 0,
+            y: 0,
+            width: "100vw", // Tam ekran genişliği
+            height: "100vh", // Tam ekran yüksekliği
+            duration: 1.5,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top center", // Bileşen tam ortadayken animasyon başlar
+              end: "bottom center", // Çıkış yaparken eski boyutuna döner
+              scrub: true, // Scroll hareketine bağlı animasyon
+            },
+          }
+        );
+      };
+
+      loadGsap();
     }
   }, []);
 
