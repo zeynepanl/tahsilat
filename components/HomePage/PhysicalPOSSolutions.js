@@ -22,6 +22,7 @@ const PhysicalPOSSolutions = () => {
 
       gsap.registerPlugin(ScrollTrigger);
 
+      // Başlangıç stillerini ayarla
       gsap.set(".animated-image-container", {
         position: "relative",
         overflow: "hidden",
@@ -66,12 +67,18 @@ const PhysicalPOSSolutions = () => {
         visibility: "hidden",
       });
 
+      gsap.set(".overlay", {
+        opacity: 0,
+        pointerEvents: "none",
+        zIndex: 5,
+      });
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: ".animated-image-container",
           start: "top top",
           end: "bottom top",
-          scrub: 1.2, // Animasyonun yukarı/aşağı çalışmasını sağlar
+          scrub: 1.2,
           onUpdate: (self) => {
             if (self.direction < 0) {
               gsap.set(".animated-image, .animated-text, .feature-card-container", {
@@ -114,6 +121,13 @@ const PhysicalPOSSolutions = () => {
           },
           "<"
         )
+        // Arka plan karartma animasyonu
+        .to(".overlay", {
+          opacity: 0.5,
+          pointerEvents: "auto",
+          duration: 0.5,
+          ease: "power3.out",
+        })
         // Kartların animasyonu
         .to(".feature-card-container", {
           opacity: 1,
@@ -149,7 +163,15 @@ const PhysicalPOSSolutions = () => {
           },
           "-=1"
         )
-        .to({}, { duration: 6 }) // 6 saniye bekle
+        .to({}, { duration: 6 }) // Bekleme süresi
+        // Karartmayı geri alma
+        .to(".overlay", {
+          opacity: 0,
+          pointerEvents: "none",
+          duration: 0.5,
+          ease: "power3.in",
+        })
+        // Görsel ve metni gizle
         .to(
           ".animated-image",
           {
@@ -192,6 +214,9 @@ const PhysicalPOSSolutions = () => {
 
   return (
     <div className="bg-white p-6 md:p-20 rounded-lg font-poppins">
+      {/* Overlay */}
+      <div className="overlay fixed top-0 left-0 w-full h-full bg-black opacity-0 pointer-events-none"></div>
+
       {/* Üst Görsel ve Metin için Container */}
       <div className="animated-image-container relative w-full h-[600px] mb-12">
         {/* Görsel */}
@@ -210,12 +235,9 @@ const PhysicalPOSSolutions = () => {
             POS Çözümleri
           </h1>
           <p className="text-lg lg:text-xl text-right">
-            İster küçük bir işletme olun ister küresel bir kuruluş, sizin
-            yanınızdayız.
-            <br /> Satış noktası (POS) çözümlerimiz, işinizi daha verimli bir
-            şekilde
-            <br /> yürütmenize ve gelirlerinizi artırmanıza yardımcı olmak için
-            tasarlanmıştır.
+            İster küçük bir işletme olun ister küresel bir kuruluş, sizin yanınızdayız.
+            <br /> Satış noktası (POS) çözümlerimiz, işinizi daha verimli bir şekilde
+            <br /> yürütmenize ve gelirlerinizi artırmanıza yardımcı olmak için tasarlanmıştır.
           </p>
         </div>
       </div>
@@ -243,4 +265,3 @@ const FeatureCard = ({ icon, text }) => {
 };
 
 export default PhysicalPOSSolutions;
-
