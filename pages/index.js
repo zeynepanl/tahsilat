@@ -13,6 +13,7 @@ import CreatePool from '@/components/HomePage/CreatePool'
 import SubDealer from '@/components/HomePage/SubDealer'
 import PaymentLinkIntro from '@/components/HomePage/PaymentLinkIntro'
 import PhysicalPOSSolutions from '@/components/HomePage/PhysicalPOSSolutions'
+import BackgroundSVG from '@/components/HomePage/BackgroundSVG'
 
 export default function Home() {
   return (
@@ -24,6 +25,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+        <BackgroundSVG />
 
       {/* Ana içerik */}
       <main className="max-w-7xl mx-auto">
