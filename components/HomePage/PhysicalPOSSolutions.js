@@ -72,7 +72,15 @@ const PhysicalPOSSolutions = () => {
           trigger: ".animated-image-container",
           start: "top top",
           end: "bottom top",
-          scrub: 1.2,
+          scrub: 1.2, // Animasyonun yukarı/aşağı çalışmasını sağlar
+          onUpdate: (self) => {
+            if (self.direction < 0) {
+              // Yukarı kaydırma yönünde
+              gsap.set(".animated-image, .animated-text, .feature-card-container", {
+                visibility: "visible",
+              });
+            }
+          },
         },
       });
 
@@ -131,7 +139,7 @@ const PhysicalPOSSolutions = () => {
           "-=1"
         )
         // Görsel ve metni biraz daha uzun süre görünür bırak
-        .to({}, { duration: 6 }) // 2 saniye bekle
+        .to({}, { duration: 6 }) // 6 saniye bekle
         // Görseli gizle
         .to(
           ".animated-image",
