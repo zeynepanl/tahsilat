@@ -22,7 +22,6 @@ const PhysicalPOSSolutions = () => {
 
       gsap.registerPlugin(ScrollTrigger);
 
-      // Başlangıç stillerini ayarla
       gsap.set(".animated-image-container", {
         position: "relative",
         overflow: "hidden",
@@ -75,7 +74,6 @@ const PhysicalPOSSolutions = () => {
           scrub: 1.2, // Animasyonun yukarı/aşağı çalışmasını sağlar
           onUpdate: (self) => {
             if (self.direction < 0) {
-              // Yukarı kaydırma yönünde
               gsap.set(".animated-image, .animated-text, .feature-card-container", {
                 visibility: "visible",
               });
@@ -85,7 +83,6 @@ const PhysicalPOSSolutions = () => {
       });
 
       tl
-        // Görselin animasyonu
         .fromTo(
           ".animated-image",
           { opacity: 0.7, x: "100%" },
@@ -101,7 +98,6 @@ const PhysicalPOSSolutions = () => {
               }),
           }
         )
-        // Metnin animasyonu
         .fromTo(
           ".animated-text",
           { y: 50, opacity: 0 },
@@ -135,12 +131,25 @@ const PhysicalPOSSolutions = () => {
             duration: 0.8,
             stagger: { each: 0.2 },
             ease: "power3.out",
+            onStart: () => {
+              gsap.to(".feature-card", {
+                boxShadow: "0px 0px 20px 5px rgba(128, 0, 128, 0.8)", // Mor parlayan kenarlık
+                repeat: -1,
+                yoyo: true,
+                duration: 1.5,
+              });
+
+              gsap.to(".feature-card", {
+                scale: 1.1,
+                repeat: -1,
+                yoyo: true,
+                duration: 1.5,
+              });
+            },
           },
           "-=1"
         )
-        // Görsel ve metni biraz daha uzun süre görünür bırak
         .to({}, { duration: 6 }) // 6 saniye bekle
-        // Görseli gizle
         .to(
           ".animated-image",
           {
@@ -155,7 +164,6 @@ const PhysicalPOSSolutions = () => {
           },
           "-=1"
         )
-        // Metni gizle
         .to(
           ".animated-text",
           {
@@ -170,7 +178,6 @@ const PhysicalPOSSolutions = () => {
           },
           "<"
         )
-        // Kartları gizle
         .to(".feature-card-container", {
           opacity: 0,
           visibility: "hidden",
@@ -236,3 +243,4 @@ const FeatureCard = ({ icon, text }) => {
 };
 
 export default PhysicalPOSSolutions;
+
