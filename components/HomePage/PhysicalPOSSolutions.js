@@ -259,7 +259,14 @@ const FeatureCard = ({ icon, text }) => {
   return (
     <div className="feature-card flex flex-col items-center justify-center p-6 border border-purple-500 rounded-lg transform transition duration-300 hover:scale-105">
       <div className="text-2xl text-purple-500 mb-2">{icon}</div>
-      <p className="text-center font-medium text-black">{text}</p>
+      <p
+        className="text-center font-medium text-white"
+        style={{
+          textShadow: "0px 0px 10px rgba(255, 255, 255, 0.8)", // Parlak beyaz metin efekti
+        }}
+      >
+        {text}
+      </p>
     </div>
   );
 };
